@@ -1,3 +1,4 @@
+import Adhan
 import AppKit
 import Combine
 import CoreLocation
