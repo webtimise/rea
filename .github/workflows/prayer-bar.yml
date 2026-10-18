@@ -1,0 +1,29 @@
+name: PrayerBar
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/prayer-bar.yml"
+      - "experiments/prayer-bar/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prayer-bar-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: experiments/prayer-bar
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - run: swift --version
+      - run: swift test
+      - name: Build the app bundle
+        run: ./bundle.sh
